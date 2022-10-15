@@ -1,7 +1,8 @@
-CREATE DATABASE Clinica
+CREATE DATABASE Clinica --Criação da base de dados Clinica
 
 GO
 USE Clinica
+--Crição da tabela paciente
 CREATE TABLE paciente(
 num_beneficiario       INT              NOT NULL,
 nome                   VARCHAR(200)     NOT NULL,
@@ -13,12 +14,14 @@ telefone               VARCHAR(11)      NOT NULL
 PRIMARY KEY (num_beneficiario)
 )
 
+--Criação da tabela especialidade
 CREATE TABLE especialidade(
 id                     INT              NOT NULL,
 especialidade          VARCHAR(200)     NOT NULL
 PRIMARY KEY (id)
 )
 
+--Criação da tabela medico
 CREATE TABLE medico(
 codigo              INT                 NOT NULL,
 nome                VARCHAR(100)        NOT NULL,
@@ -31,6 +34,8 @@ especialidade_id    INT                 NOT NULL
 PRIMARY KEY  (codigo)
 FOREIGN KEY  (especialidade_id)   REFERENCES  especialidade(id)
 ) 
+
+--Criação da tabela consulta
 CREATE TABLE consulta(
 paciente_num_beneficiario       INT            NOT NULL,
 medico_codigo                   INT            NOT NULL,
@@ -41,6 +46,7 @@ FOREIGN KEY (paciente_num_beneficiario) REFERENCES  paciente(num_beneficiario),
 FOREIGN KEY (medico_codigo) REFERENCES medico(codigo)   
 )
 
+--Inserção das informações do paciente
 INSERT INTO paciente(num_beneficiario, nome, logradouro, numero, CEP, complemento, telefone)
 VALUES               (99901, 'Washington Silva', 'R. Anhaia', 150, '02345000', 'Casa', '922229999')
 
@@ -58,7 +64,7 @@ VALUES               (99905, 'Joana Paula', 'R. 7 de Abril', 97, '01214000', 'Co
 
 SELECT * FROM paciente
 
-
+--Inserção das informações da especialidade do medico
 INSERT INTO especialidade(id, especialidade)
 VALUES       (1 , 'Otorrinolaringologista')
 
@@ -74,7 +80,7 @@ VALUES       (4 , 'Pediatra')
 
 SELECT * FROM especialidade
 
-
+--Inserção das informações do medico
 INSERT INTO medico(codigo, nome, logradouro, numero, CEP, complemento, contato, especialidade_id)
 VALUES          (100001, 'Ana Paula', 'R. 7 de Setembro', 256, 03698000, 'Casa', 915689456, 1)
 
@@ -90,7 +96,7 @@ VALUES          (100004, 'Gabriel Oliveira', 'Av. Dom Helder Camara', 350, 03145
 
 SELECT * FROM medico
 
-
+--inserção das informações da consulta
 INSERT INTO consulta(paciente_num_beneficiario, medico_codigo, data_hora, observacao)
 VALUES              (99901, 100002, '2021-09-04 13:20', 'Infecção Urina')
 
@@ -105,10 +111,11 @@ SELECT * FROM paciente
 SELECT * FROM medico
 SELECT * FROM especialidade
 SELECT * FROM consulta
-
+--Criação da coluna dia_atendimento
 ALTER TABLE medico
 ADD dia_atendimento  VARCHAR(100)  NULL
 
+--Autalizar e adicionar os dias da semana de atendimento do medico
 UPDATE medico
 SET dia_atendimento = '2ª feira'
 WHERE codigo = 100001
@@ -134,7 +141,7 @@ EXEC sp_rename 'dbo.medico.dia_atendimento',
 DELETE especialidade
 WHERE id = 4
 
-
+--Atualizar tabela do medico lucas
 UPDATE medico
 SET logradouro = 'Av. Bras Leme'
 WHERE codigo = 100003
